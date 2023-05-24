@@ -1,6 +1,6 @@
 // If you have time, you can move this variable "products" to a json or js file and load the data in this js. It will look more professional
 var products = [
-   {
+    {
         id: 1,
         name: 'cooking oil',
         price: 10.5,
@@ -75,22 +75,53 @@ var total = 0;
 function buy(id) {
     // 1. Loop for to the array products to get the item to add to cart
     // 2. Add found product to the cartList array
+    for (let i = 0; i < products.length; i++) {
+        let element = products[i];
+        if (element.id == id) {
+            cartList.push(element)
+        }
+    }
+   console.log(cartList)
+   calculateTotal()
+
 }
 
 // Exercise 2
 function cleanCart() {
-
+    cartList.splice(0,cartList.length)
+    console.log(cartList)
 }
 
 // Exercise 3
 function calculateTotal() {
     // Calculate total price of the cart using the "cartList" array
+
+    for (let i = 0; i < cartList.length; i++) {
+        let element = cartList[i];
+        total+=element.price;
+    }
+    // console.log('El total es: ' + total)
+    document.getElementById("total_price").innerHTML=total
+    generateCart()
 }
 
 // Exercise 4
 function generateCart() {
     // Using the "cartlist" array that contains all the items in the shopping cart, 
     // generate the "cart" array that does not contain repeated items, instead each item of this array "cart" shows the quantity of product.
+let count = 0;
+    for (let i = 0; i < cartList.length; i++) {
+        let element = cartList.indexOf(cartList[i]);
+        
+        if (element >(-1) ) {
+            count++
+            console.log("si")
+        }
+        else{
+            console.log("no")
+        }
+    }
+    console.log(" hay: " + count + " elementos del mismo" )
 }
 
 // Exercise 5
@@ -119,7 +150,7 @@ function removeFromCart(id) {
     // 2. Add found product to the cartList array
 }
 
-function open_modal(){
-	console.log("Open Modal");
-	printCart();
+function open_modal() {
+    console.log("Open Modal");
+    printCart();
 }
