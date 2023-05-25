@@ -85,6 +85,7 @@ function buy(id) {
     }
     calculateTotal()
     applyPromotionsCart()
+    generateCart()
    
 }
 
@@ -99,12 +100,10 @@ function calculateTotal() {
     // Calculate total price of the cart using the "cartList" array
     total = 0;
     for (let i = 0; i < cartList.length; i++) {
-        let element = cartList[i];
-        total+=element.price;
+        total+=cartList[i].price;
     }
-    // console.log('El total es: ' + total)
     document.getElementById("total_price").innerHTML=total
-    generateCart()
+
 }
 
 // Exercise 4
@@ -128,12 +127,12 @@ function applyPromotionsCart() {
 
 cart.forEach(element => {
 
-    if (element.quantity == 3 && element.id == 1){
-        element.subtotalWithDiscount= 10;
-        
+    if (element.quantity >= 3 && element.id == 1){
+        let descuentoUnidad = 10;
+        element.subtotalWithDiscount = element.quantity * descuentoUnidad
     }
-    else if ( element.quantity == 10 && element.id == 3){
-        descuentoUnidad = (element.price / 3) *2
+    else if ( element.quantity >= 10 && element.id == 3){
+        let descuentoUnidad = (element.price / 3) *2
         element.subtotalWithDiscount = element.quantity * descuentoUnidad
     }
 });
