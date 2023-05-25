@@ -1,3 +1,5 @@
+
+
 // If you have time, you can move this variable "products" to a json or js file and load the data in this js. It will look more professional
 var products = [
     {
@@ -81,9 +83,9 @@ function buy(id) {
             cartList.push(element)
         }
     }
-   console.log(cartList)
-   calculateTotal()
-
+    calculateTotal()
+    applyPromotionsCart()
+   
 }
 
 // Exercise 2
@@ -95,7 +97,7 @@ function cleanCart() {
 // Exercise 3
 function calculateTotal() {
     // Calculate total price of the cart using the "cartList" array
-
+    total = 0;
     for (let i = 0; i < cartList.length; i++) {
         let element = cartList[i];
         total+=element.price;
@@ -109,29 +111,49 @@ function calculateTotal() {
 function generateCart() {
     // Using the "cartlist" array that contains all the items in the shopping cart, 
     // generate the "cart" array that does not contain repeated items, instead each item of this array "cart" shows the quantity of product.
-let count = 0;
-    for (let i = 0; i < cartList.length; i++) {
-        let element = cartList.indexOf(cartList[i]);
-        
-        if (element >(-1) ) {
-            count++
-            console.log("si")
+    cart = [];
+    cartList.forEach(element => {
+        if (cart.includes(element)){
+            element.quantity++
         }
         else{
-            console.log("no")
+            element.quantity = 1
+            cart.push(element)
         }
-    }
-    console.log(" hay: " + count + " elementos del mismo" )
+    });
 }
-
 // Exercise 5
 function applyPromotionsCart() {
     // Apply promotions to each item in the array "cart"
+
+cart.forEach(element => {
+
+    if (element.quantity == 3 && element.id == 1){
+        element.subtotalWithDiscount= 10;
+        
+    }
+    else if ( element.quantity == 10 && element.id == 3){
+        descuentoUnidad = (element.price / 3) *2
+        element.subtotalWithDiscount = element.quantity * descuentoUnidad
+    }
+});
 }
 
 // Exercise 6
 function printCart() {
     // Fill the shopping cart modal manipulating the shopping cart dom
+    
+    document.getElementById("cart_list").innerHTML= ""
+    cart.forEach(element => {
+        document.getElementById("cart_list").innerHTML += 
+        `<tr>
+        <th scope="row">${element.name}</th>
+        <td>$${element.price}</td>
+        <td>${element.quantity}</td>
+        <td>$${element.subtotalWithDiscount}</td>
+        </tr>`
+        
+    });
 }
 
 
