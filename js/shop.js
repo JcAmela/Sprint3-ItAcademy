@@ -83,26 +83,25 @@ function buy(id) {
             cartList.push(element)
         }
     }
-    calculateTotal()
-    applyPromotionsCart()
     generateCart()
-   
+    applyPromotionsCart()
+    calculateTotal()
 }
 
 // Exercise 2
 function cleanCart() {
-    cartList.splice(0,cartList.length)
+    cartList.splice(0, cartList.length)
     console.log(cartList)
 }
-
+document.getElementById("total_price").innerHTML = ""
 // Exercise 3
 function calculateTotal() {
     // Calculate total price of the cart using the "cartList" array
     total = 0;
-    for (let i = 0; i < cartList.length; i++) {
-        total+=cartList[i].price;
+    for (let i = 0; i < cart.length; i++) {
+        total += cart[i].quantity*cart[i].price;
     }
-    document.getElementById("total_price").innerHTML=total
+    document.getElementById("total_price").innerHTML = total
 
 }
 
@@ -112,12 +111,13 @@ function generateCart() {
     // generate the "cart" array that does not contain repeated items, instead each item of this array "cart" shows the quantity of product.
     cart = [];
     cartList.forEach(element => {
-        if (cart.includes(element)){
-            element.quantity++
+        let found = cart.find(e => e.id === element.id)
+        if (found) {
+            found.quantity++
         }
-        else{
-            element.quantity = 1
-            cart.push(element)
+        else {
+            let newObject = { ...element, quantity: 1 };
+            cart.push(newObject)
         }
     });
 }
@@ -125,33 +125,32 @@ function generateCart() {
 function applyPromotionsCart() {
     // Apply promotions to each item in the array "cart"
 
-cart.forEach(element => {
-
-    if (element.quantity >= 3 && element.id == 1){
-        let descuentoUnidad = 10;
-        element.subtotalWithDiscount = element.quantity * descuentoUnidad
-    }
-    else if ( element.quantity >= 10 && element.id == 3){
-        let descuentoUnidad = (element.price / 3) *2
-        element.subtotalWithDiscount = element.quantity * descuentoUnidad
-    }
-});
+    cart.forEach(element => {
+        if (element.offer && element.quantity >= element.offer.number) {
+            let discountPercentUnit = element.price * element.offer.percent / 100;
+            element.priceWithDiscount = element.price - discountPercentUnit;
+            element.subtotalWithDiscount = element.quantity * element.priceWithDiscount;
+            element.subtotalWithDiscount=element.subtotalWithDiscount.toFixed(2)
+        }
+        else {
+            element.subtotalWithDiscount = element.quantity * element.price;
+        }
+    });
 }
 
 // Exercise 6
 function printCart() {
     // Fill the shopping cart modal manipulating the shopping cart dom
-    
-    document.getElementById("cart_list").innerHTML= ""
+    const carrito = document.getElementById("cart_list")
+    carrito.innerHTML = ""
     cart.forEach(element => {
-        document.getElementById("cart_list").innerHTML += 
-        `<tr>
-        <th scope="row">${element.name}</th>
-        <td>$${element.price}</td>
-        <td>${element.quantity}</td>
-        <td>$${element.subtotalWithDiscount}</td>
-        </tr>`
-        
+        carrito.innerHTML +=
+            `<tr>
+            <th scope="row">${element.name}</th>
+            <td>$${element.price}</td>
+            <td>${element.quantity}</td>
+            <td>$${element.subtotalWithDiscount}</td>
+            </tr>`
     });
 }
 
