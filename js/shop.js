@@ -90,19 +90,22 @@ function buy(id) {
 
 // Exercise 2
 function cleanCart() {
-    cartList.splice(0, cartList.length)
-    console.log(cartList)
+    cart.splice(0, cart.length)
+    calculateTotal()
+    printCart()
 }
-document.getElementById("total_price").innerHTML = ""
 // Exercise 3
 function calculateTotal() {
     // Calculate total price of the cart using the "cartList" array
     total = 0;
-    for (let i = 0; i < cart.length; i++) {
-        total += cart[i].quantity*cart[i].price;
-    }
-    document.getElementById("total_price").innerHTML = total
-
+    cart.forEach(element => {
+        if (element.subtotalWithDiscount === undefined) {
+            total += element.quantity * element.price;
+        } else {
+            total += element.subtotalWithDiscount
+        }
+    });
+    document.getElementById("total_price").innerHTML = total.toFixed(2)
 }
 
 // Exercise 4
@@ -114,8 +117,7 @@ function generateCart() {
         let found = cart.find(e => e.id === element.id)
         if (found) {
             found.quantity++
-        }
-        else {
+        } else {
             let newObject = { ...element, quantity: 1 };
             cart.push(newObject)
         }
@@ -124,19 +126,18 @@ function generateCart() {
 // Exercise 5
 function applyPromotionsCart() {
     // Apply promotions to each item in the array "cart"
-
     cart.forEach(element => {
-        if (element.offer && element.quantity >= element.offer.number) {
-            let discountPercentUnit = element.price * element.offer.percent / 100;
-            element.priceWithDiscount = element.price - discountPercentUnit;
-            element.subtotalWithDiscount = element.quantity * element.priceWithDiscount;
-            element.subtotalWithDiscount=element.subtotalWithDiscount.toFixed(2)
-        }
-        else {
-            element.subtotalWithDiscount = element.quantity * element.price;
+        if (element.id === 1 && element.quantity >= 3) {
+            element.price = 10;
+            element.subtotalWithDiscount = element.price * element.quantity;
+        } else if (element.id === 3 && element.quantity >= 10) {
+            element.subtotalWithDiscount = ((element.price * element.quantity) /3) *2;
+        } else {
+            element.subtotalWithDiscount = element.price * element.quantity
         }
     });
 }
+
 
 // Exercise 6
 function printCart() {
@@ -147,9 +148,9 @@ function printCart() {
         carrito.innerHTML +=
             `<tr>
             <th scope="row">${element.name}</th>
-            <td>$${element.price}</td>
+            <td>$${element.price.toFixed(2)}</td>
             <td>${element.quantity}</td>
-            <td>$${element.subtotalWithDiscount}</td>
+            <td>$${element.subtotalWithDiscount.toFixed(2)}</td>
             </tr>`
     });
 }
@@ -172,5 +173,6 @@ function removeFromCart(id) {
 
 function open_modal() {
     console.log("Open Modal");
-    printCart();
+    calculateTotal()
+    printCart()
 }
