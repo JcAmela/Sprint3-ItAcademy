@@ -1,5 +1,5 @@
-function validate(event) {
-    event.preventDefault();
+function validate(event) { // Se utiliza event.preventDefault() en el controlador del evento de envío, para prevenir la acción de envío del formulario y así, no se refrescará la página.
+    event.preventDefault(); 
 
 // Primero guardo las expresiones regulares
     var lettersOnly = /^[A-Za-z]+$/;
@@ -21,11 +21,11 @@ function validate(event) {
     fields.forEach(field => {
         var inputField = document.getElementById(field.id); // Guardamos el elemento del input en la variable
         var errorElement = document.getElementById('error' + field.id.substring(1)); // Le quitamos la 'f' inicial a la id y le añadimos 'error' delante para construir el id del mensaje de error
-        if (inputField.value.length < 3 || !field.regex.test(inputField.value)) { 
-            errorElement.style.display = 'block'; // Mostramos el mensaje de error 
+        if (inputField.value.length < 3 || !field.regex.test(inputField.value)) {  // Realizamos el test de validacion en la cadena de texto de las expresiones regulares con el imput introducido por el usuario
+            errorElement.style.display = 'block'; // Si es incorrecto mostramos el mensaje de error 
             inputField.classList.add('is-invalid');  //Añadimos la clase is-invalid para indicar visualmente el error
         } else {
-            errorElement.style.display = 'none'; // si el formato del campo esta bien, ocultamos el mensaje de error
+            errorElement.style.display = 'none'; // Si el formato del campo esta bien, ocultamos el mensaje de error
             inputField.classList.remove('is-invalid'); // y eliminamos la clase is-invalid
         }
     });
