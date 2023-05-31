@@ -73,75 +73,87 @@ var cart = [];
 
 var total = 0;
 
-// Exercise 1
+// Ejercicio 1
 function buy(id) {
-    // 1. Loop for to the array products to get the item to add to cart
-    // 2. Add found product to the cartList array
+    // Recorremos todos los productos uno a uno.
     for (let i = 0; i < products.length; i++) {
-        let element = products[i];
+        let element = products[i]; // Elegimos el producto actual.
+        // Si el producto actual tiene el mismo ID que el que queremos comprar...
         if (element.id == id) {
-            cartList.push(element)
+            cartList.push(element) // ...lo metemos en el carrito.
         }
     }
+    // Luego de agregar el producto, generamos la lista del carrito, aplicamos las promociones y calculamos el total.
     generateCart()
     applyPromotionsCart()
     calculateTotal()
 }
 
-// Exercise 2
+// Ejercicio 2
 function cleanCart() {
+    // Eliminamos todos los elementos del carrito.
     cart.splice(0, cart.length)
+    // Luego de limpiarlo, recalculamos el total y mostramos el carrito vacío.
     calculateTotal()
     printCart()
 }
-// Exercise 3
+
+// Ejercicio 3
 function calculateTotal() {
-    // Calculate total price of the cart using the "cartList" array
+    // Empezamos con total igual a 0.
     total = 0;
+    // Recorremos todos los productos del carrito uno a uno.
     cart.forEach(element => {
+        // Si el producto no tiene descuento, sumamos el precio por su cantidad al total.
         if (element.subtotalWithDiscount === undefined) {
             total += element.quantity * element.price;
         } else {
+            // Si tiene descuento, sumamos el subtotal con descuento al total.
             total += element.subtotalWithDiscount
         }
     });
+    // Actualizamos el total en el HTML con dos decimales.
     document.getElementById("total_price").innerHTML = total.toFixed(2)
 }
 
-// Exercise 4
+// Ejercicio 4
 function generateCart() {
-    // Using the "cartlist" array that contains all the items in the shopping cart, 
-    // generate the "cart" array that does not contain repeated items, instead each item of this array "cart" shows the quantity of product.
+    // Empezamos con el carrito vacío.
     cart = [];
+    // Recorremos todos los productos.
     cartList.forEach(element => {
+        // Buscamos si el producto ya se encuentra en el carrito.
         let found = cart.find(e => e.id === element.id)
+        // Si el producto ya se encuentra, incrementamos su cantidad.
         if (found) {
             found.quantity++
         } else {
+            // Si el producto no se encuentra, lo agregamos con cantidad 1.
             let newObject = { ...element, quantity: 1 };
             cart.push(newObject)
         }
     });
 }
-// Exercise 5
+
+// Ejercicio 5
 function applyPromotionsCart() {
-    // Apply promotions to each item in the array "cart"
     cart.forEach(element => {
+        // Si el producto es el de ID 1 y su cantidad es 3 o más, aplicamos un descuento.
         if (element.id === 1 && element.quantity >= 3) {
             element.price = 10;
             element.subtotalWithDiscount = element.price * element.quantity;
         } else if (element.id === 3 && element.quantity >= 10) {
-            element.subtotalWithDiscount = ((element.price * element.quantity) /3) *2;
+            // Si el producto es el de ID 3 y su cantidad es 10 o más, aplicamos otro descuento.
+            element.subtotalWithDiscount = ((element.price * element.quantity) / 3) * 2;
         } else {
+            // Si el producto no tiene descuentos, el subtotal con descuento es igual al precio por la cantidad.
             element.subtotalWithDiscount = element.price * element.quantity
         }
     });
 }
-
-
-// Exercise 6
+// Ejercicio 6
 function printCart() {
-    // Fill the shopping cart modal manipulating the shopping cart dom
+    // Rellena el modal manipulando el DOM.
     const carrito = document.getElementById("cart_list")
     carrito.innerHTML = ""
     cart.forEach(element => {
@@ -154,6 +166,7 @@ function printCart() {
             </tr>`
     });
 }
+
 
 
 // ** Nivell II **
