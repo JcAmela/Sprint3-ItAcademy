@@ -150,6 +150,7 @@ function applyPromotionsCart() {
             element.subtotalWithDiscount = element.price * element.quantity
         }
     });
+    printCart()
 }
 // Ejercicio 6
 function printCart() {
@@ -173,9 +174,23 @@ function printCart() {
 
 // Exercise 7
 function addToCart(id) {
-    // Refactor previous code in order to simplify it 
-    // 1. Loop for to the array products to get the item to add to cart
-    // 2. Add found product to the cart array or update its quantity in case it has been added previously.
+    // Refactorizar el código previo para simplificarlo
+    // 1. Bucle for para recorrer el array de productos y obtener el producto a añadir al carrito
+        // 2. Añadir el producto encontrado al array del carrito o actualizar su cantidad en caso de que se haya Find previamente.
+    let primer_producto = products.find(e => e.id === id)
+    if(primer_producto){
+        let producto_añadido = cart.find(e => e.id === primer_producto.id)
+        if (producto_añadido){
+            producto_añadido.quantity++
+        } else {
+        primer_producto.quantity = 1
+        cart.push(primer_producto)
+        }
+    } else{
+        console.log("Producto no encontrado")
+    }
+    console.log(cart)
+    applyPromotionsCart()
 }
 
 // Exercise 8
