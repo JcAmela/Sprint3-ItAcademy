@@ -114,6 +114,7 @@ function calculateTotal() {
     });
     // Actualizamos el total en el HTML con dos decimales.
     document.getElementById("total_price").innerHTML = total.toFixed(2)
+    printCart()
 }
 
 // Ejercicio 4
@@ -144,28 +145,38 @@ function applyPromotionsCart() {
             element.subtotalWithDiscount = element.price * element.quantity;
         } else if (element.id === 3 && element.quantity >= 10) {
             // Si el producto es el de ID 3 y su cantidad es 10 o más, aplicamos otro descuento.
+            element.price = 10.5;
             element.subtotalWithDiscount = ((element.price * element.quantity) / 3) * 2;
+            
         } else {
             // Si el producto no tiene descuentos, el subtotal con descuento es igual al precio por la cantidad.
+            element.price = 10.5;
             element.subtotalWithDiscount = element.price * element.quantity
         }
     });
-    printCart()
+    calculateTotal()
 }
+
 // Ejercicio 6
 function printCart() {
     // Rellena el modal manipulando el DOM.
     const carrito = document.getElementById("cart_list")
     carrito.innerHTML = ""
     cart.forEach(element => {
+        if (element.quantity === 0) {
+            carrito.innerHTML +=""
+        }else{
         carrito.innerHTML +=
             `<tr>
             <th scope="row">${element.name}</th>
             <td>$${element.price.toFixed(2)}</td>
             <td>${element.quantity}</td>
             <td>$${element.subtotalWithDiscount.toFixed(2)}</td>
+            <button onclick="removeFromCart(${element.id})">basura</button>
             </tr>`
+        }
     });
+    numeroCarrito()
 }
 
 
@@ -182,6 +193,7 @@ function addToCart(id) {
         let producto_añadido = cart.find(e => e.id === primer_producto.id)
         if (producto_añadido){
             producto_añadido.quantity++
+
         } else {
         primer_producto.quantity = 1
         cart.push(primer_producto)
@@ -189,7 +201,6 @@ function addToCart(id) {
     } else{
         console.log("Producto no encontrado")
     }
-    console.log(cart)
     applyPromotionsCart()
 }
 
@@ -197,10 +208,32 @@ function addToCart(id) {
 function removeFromCart(id) {
     // 1. Loop for to the array products to get the item to add to cart
     // 2. Add found product to the cartList array
+    let eliminar_producto = cart.find(e => e.id === id)
+    eliminar_producto.quantity--;
+    if (eliminar_producto) {
+        if (eliminar_producto.quantity === 0) {
+            cart.pop(eliminar_producto)
+        }
+    }
+    applyPromotionsCart()
 }
 
 function open_modal() {
     console.log("Open Modal");
     calculateTotal()
-    printCart()
+}
+
+// Sé que podría haberlo integrado en alguna funcion ya existente pero he pensado que era de buenas practicas separar funciones mas pequeñas para reutilizar codigo 
+function numeroCarrito() {
+    debugger
+    let  countProduct = document.getElementById("count_product")
+    let productoCantidad = 0
+    cart.forEach(element => {
+        productoCantidad += element.quantity
+       
+        if (cart == []) {
+            productoCantidad = 0
+        }
+    });
+    countProduct.innerHTML = productoCantidad
 }
