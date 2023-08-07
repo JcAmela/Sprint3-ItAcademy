@@ -4,7 +4,7 @@
 
 Para este sprint, se nos proporcionó la maquetación de una aplicación de comercio electrónico y se nos asignó la tarea de implementar sus funcionalidades con JavaScript.
 
-Puedes ver la página en acción [aquí](https://jcamela.github.io/Sprint3-ItAcademy.github.io/).
+[Puedes ver la página en acción aquí](https://jcamela.github.io/Sprint3-ItAcademy/).
 
 ## 🎯 Niveles y Ejercicios
 
